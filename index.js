@@ -9,7 +9,6 @@ import cors from "cors";
 const DB_URL=`mongodb+srv://nersesgrigoryan94:nersesgrigoryan94@cluster0.1kwe2yv.mongodb.net/?retryWrites=true&w=majority`
 const PORT=8080
 const app=express()
-app.server.timeout = 60000;
 const corsOptions = {
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
