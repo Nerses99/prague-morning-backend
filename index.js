@@ -19,7 +19,9 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use("/api",jobRouter)
 app.use("/api",authRouter)
-
+app.get("/", (req, res) => {
+  res.send("Express on Vercel");
+});
 async function startApp(){
   try {
     await mongoose.connect(DB_URL)
