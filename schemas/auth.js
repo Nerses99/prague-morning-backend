@@ -12,6 +12,10 @@ const Users=new mongoose.Schema({
     type: String,
     required: true
   },
+  fileName: {
+    type: String,
+    required: true
+  },
 })
 
 export default mongoose.model("Users",Users)
