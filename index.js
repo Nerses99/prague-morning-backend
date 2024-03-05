@@ -1,13 +1,11 @@
 import express from "express"
 import mongoose from "mongoose";
-import jobRouter from "./routers/jobRouter.js";
-import authRouter from "./routers/authRouter.js";
+import jobRouter from "./src/routers/jobRouter.js";
+import authRouter from "./src/routers/authRouter.js";
 import cors from "cors";
 import Stripe from 'stripe';
-import multer from "multer";
-import Users from "./schemas/auth.js";
-import resumeRouter from "./routers/resumeRouter.js";
-
+import resumeRouter from "./src/routers/resumeRouter.js";
+import contactRouter from "./src/routers/contactRouter.js";
 
 
 const DB_URL = `mongodb+srv://nersesgrigoryan94:nersesgrigoryan94@cluster0.1kwe2yv.mongodb.net/?retryWrites=true&w=majority`
@@ -24,6 +22,7 @@ app.use(express.json())
 app.use("/api", jobRouter)
 app.use("/api", authRouter)
 app.use("/api", resumeRouter)
+app.use("/api", contactRouter)
 
 app.get("/", (req, res) => {
   res.send("Express on Vercel");
@@ -41,7 +40,6 @@ app.post("/pay", async (res, req) => {
   });
   await res.json("client_secret", paymentIntent("client_secret"))
 })
-
 
 
 async function startApp() {
