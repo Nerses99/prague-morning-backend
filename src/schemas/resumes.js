@@ -1,20 +1,20 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const Resumes=new mongoose.Schema({
+const Resumes = new mongoose.Schema({
   fileName: {
     type: String,
   },
-  email: {
+  em: {
     type: String,
   },
   jobTitle: {
     type: String,
     // required: true
   },
-  location:{
-    type:String,
+  location: {
+    type: String,
     // required:true
-  }
-})
+  },
+});
 
-export default mongoose.model("Resumes",Resumes)
+export default mongoose.model('Resumes', Resumes);

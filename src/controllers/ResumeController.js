@@ -1,15 +1,18 @@
-import Resumes from "../schemas/resumes.js";
+import Resumes from '../schemas/resumes.js';
 
 class ResumeController {
   async createResume(req, res) {
     const file = req.file;
     if (!file) {
-      const error = new Error('Please attach a file')
+      const error = new Error('Please attach a file');
       error.statusCode = 400;
       return next(error);
     }
-    const resume = await Resumes.create({...req.body,fileName:file.filename})
-    res.json(resume)
+    const resume = await Resumes.create({
+      ...req.body,
+      fileName: file.filename,
+    });
+    res.json(resume);
   }
 
   async getResumes(req, res) {
@@ -20,8 +23,6 @@ class ResumeController {
       res.json(e);
     }
   }
-
-
 }
 
-export default new ResumeController()
+export default new ResumeController();
