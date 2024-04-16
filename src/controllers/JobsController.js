@@ -38,6 +38,7 @@ class JobsController {
       res.json(e);
     }
   }
+
   async getOneJob(req, res) {
     try {
       const { id } = req.params;

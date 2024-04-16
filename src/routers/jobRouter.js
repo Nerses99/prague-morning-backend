@@ -3,6 +3,7 @@ import JobsController from '../controllers/JobsController.js';
 import multer from 'multer';
 import xlsx from 'xlsx';
 import path from 'path';
+import Jobs from '../schemas/jobs.js';
 
 const storage = multer.diskStorage({
   destination: function (req, res, cb) {
@@ -27,19 +28,33 @@ jobRouter.get('/jobs/:id', JobsController.getOneJob);
 jobRouter.delete('/jobs/:id', JobsController.deleteJob);
 
 jobRouter.post('/upload', upload.single('upload'), async (req, res) => {
-  const file = req.file;
   try {
-    if (!file) {
-      return res.status(400).json({ message: 'No file uploaded' });
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const workbook = xlsx.readFile(req.file.path);
     const sheetName = workbook.SheetNames[0];
     const jobsData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-    res.json({ message: 'Jobs uploaded successfully', jobsData });
+    const newJobsData = jobsData.map((elem) => {
+      const { ceoCompany, companySize, companyWebsite, founded, ...code } =
+        elem;
+      const companyDetails = {
+        ceoCompany,
+        companySize,
+        companyWebsite,
+        founded,
+      };
+      return { ...code, companyDetails };
+    });
+
+    const result = await Jobs.insertMany(newJobsData);
+
+    res.json({ message: 'Jobs data uploaded successfully', result });
   } catch (error) {
-    res.status(500).json({ status: 'Error', message: error.message });
+    console.error('Error uploading jobs data:', error);
+    res.status(500).json({ message: error.message });
   }
 });
 

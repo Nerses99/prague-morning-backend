@@ -26,6 +26,7 @@ app.use('/api', contactRouter);
 app.get('/', (req, res) => {
   res.send('Express on Vercel');
 });
+
 // STRIPE
 const stripe = new Stripe(
   'sk_test_51OaEQrE5f8QAmzh8hJL8AQ49u87Q3jFxtHPsPm8keBNyTs7mIxUJF8OeRQxWm02YSwfEFLNgbsCbZkiyyiCxGE2x00NBhVttfQ'
