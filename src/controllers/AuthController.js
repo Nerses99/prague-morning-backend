@@ -4,6 +4,37 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 class AuthController {
+  async getAll(req, res) {
+    try {
+      const users = await Users.find({});
+      res.status(201).json({
+        status: 'success',
+        message: users,
+      });
+    } catch (error) {
+      res.status(404).json({
+        statsu: 'fail',
+        message: error.message,
+      });
+    }
+  }
+
+  async remove(req, res) {
+    const { id } = req.params;
+    try {
+      const user = await Users.findByIdAndDelete(id);
+      res.status(201).json({
+        status: 'success',
+        message: user,
+      });
+    } catch (error) {
+      res.status(404).json({
+        statsu: 'fail',
+        message: error.message,
+      });
+    }
+  }
+
   async register(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -12,7 +43,7 @@ class AuthController {
       });
     }
 
-    const { username, email, password } = req.body;
+    const { username, email, password, fileName } = req.body;
     try {
       let user = await Users.findOne({
         email,
@@ -29,14 +60,17 @@ class AuthController {
         password,
       });
 
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
+      //   const salt = await bcrypt.genSalt(10);
+      //   user.password = await bcrypt.hash(password, salt);
 
       await user.save();
 
       const payload = {
         user: {
           id: user.id,
+          name: user.username,
+          email: user.email,
+          password: user.password,
         },
       };
 
@@ -44,11 +78,13 @@ class AuthController {
         payload,
         'randomString',
         {
-          expiresIn: 10000,
+          expiresIn: '48h',
         },
         (err, token) => {
           if (err) throw err;
+
           res.status(200).json({
+            user,
             token,
           });
         }
@@ -87,6 +123,9 @@ class AuthController {
       const payload = {
         user: {
           id: user.id,
+          name: user.username,
+          email: user.email,
+          password: user.password,
         },
       };
 

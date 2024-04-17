@@ -1,21 +1,25 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
-const Users=new mongoose.Schema({
+const UsersSchema = new mongoose.Schema({
   username: {
     type: String,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    set: function (value) {
+      const salt = bcrypt.genSaltSync(9);
+      const hash = bcrypt.hashSync(value, salt);
+      return hash;
+    },
   },
-  fileName: {
-    type: String,
-    required: true
-  },
-})
+});
 
-export default mongoose.model("Users",Users)
+const Users = mongoose.model('Users', UsersSchema);
+
+export default Users;
